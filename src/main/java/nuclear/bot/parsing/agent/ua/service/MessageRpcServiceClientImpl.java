@@ -18,7 +18,7 @@ public class MessageRpcServiceClientImpl implements MessageRpcService {
     @Override
     public AgentMessage sendMessage(AgentMessage agentMessage) throws Throwable {
         log.info("[AGENT][UA] Send message {}", agentMessage);
-        jsonRpcHttpClient.invoke("sendMessage", agentMessage);
+        jsonRpcHttpClient.invoke("sendMessage", new Object[] {agentMessage});
         return agentMessage;
     }
 }

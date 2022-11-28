@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class SiteParserService {
     private final MessageRpcService messageRpcService;
 
-    public void parseSite() {
+    public void parseSite() throws Throwable {
         messageRpcService.sendMessage(new AgentMessage());
     }
 }

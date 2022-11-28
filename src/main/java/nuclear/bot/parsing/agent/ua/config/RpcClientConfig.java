@@ -11,7 +11,7 @@ import java.net.URL;
 @Configuration
 public class RpcClientConfig {
 
-    @Value("parsingprocessor.url")
+    @Value("${parsingprocessor.url}")
     private String url;
 
     @Bean
