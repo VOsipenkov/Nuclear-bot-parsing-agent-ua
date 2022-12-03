@@ -1,6 +1,7 @@
 package nuclear.bot.parsing.agent.ua.web;
 
 import lombok.RequiredArgsConstructor;
+import nuclear.bot.parsing.agent.ua.service.SiteParserService;
 import nuclear.bot.parsingprocessor.dto.AgentMessage;
 import nuclear.bot.parsingprocessor.service.MessageRpcService;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class TestController {
     private final MessageRpcService messageRpcService;
+    private final SiteParserService siteParserService;
 
     @GetMapping(value = "/send/{message}")
     public ResponseEntity<String> sendMessage(@PathVariable(name = "message") String message) throws Throwable {
@@ -22,6 +24,12 @@ public class TestController {
         agentMessage.setMessageDateTime(LocalDateTime.now().toString());
         agentMessage.setParsingAgentName("UA-agent");
         messageRpcService.sendMessage(agentMessage);
+        return ResponseEntity.ok("ok");
+    }
+
+    @GetMapping(value = "/parse-site")
+    public ResponseEntity<String> parseSite() {
+        siteParserService.parseSite();
         return ResponseEntity.ok("ok");
     }
 }
