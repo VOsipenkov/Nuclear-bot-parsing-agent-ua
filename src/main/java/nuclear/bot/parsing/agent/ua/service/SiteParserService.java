@@ -34,7 +34,7 @@ public class SiteParserService {
     private int MAX_RATE;
 
     private List<Integer> excludeRadarList = List.of(3725, 3729, 3731, 3732, 3733, 3734, 3756,
-//            3765, 3770, 3771, 3774,
+            3765, 3770, 3771, 3774,
             3775, 3777, 3778);
 
     @Scheduled(fixedRate = 10000)
@@ -42,7 +42,6 @@ public class SiteParserService {
         var parsedMessages = parseSite();
         if ("INFO".equals(getNotificationLevel())) {
             sendMessages(parsedMessages);
-            return;
         } else if ("ALERT".equals(getNotificationLevel())) {
             var result = parsedMessages.stream()
                     .filter(message -> Integer.parseInt(message.getMessage()) > MAX_RATE)
