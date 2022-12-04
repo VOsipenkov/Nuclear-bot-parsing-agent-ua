@@ -7,4 +7,6 @@ import nuclear.bot.parsingprocessor.dto.AgentMessage;
 @JsonRpcService("/jsonrpc")
 public interface MessageRpcService {
     AgentMessage sendMessage(@JsonRpcParam(value = "agentMessage") AgentMessage agentMessage) throws Throwable;
+
+    AlertLevel notificationLevel();
 }

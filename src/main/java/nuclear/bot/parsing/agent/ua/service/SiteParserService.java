@@ -33,9 +33,6 @@ public class SiteParserService {
     @Value("${max.radiation.rate}")
     private int MAX_RATE;
 
-    @Value("${is.level.info}")
-    private boolean IS_LEVEL_INFO;
-
     private List<Integer> excludeRadarList = List.of(3725, 3729, 3731, 3732, 3733, 3734, 3756,
 //            3765, 3770, 3771, 3774,
             3775, 3777, 3778);
@@ -43,14 +40,15 @@ public class SiteParserService {
     @Scheduled(fixedRate = 10000)
     public void executeJob() throws Exception, Throwable {
         var parsedMessages = parseSite();
-        if (IS_LEVEL_INFO) {
+        if ("INFO".equals(getNotificationLevel())) {
             sendMessages(parsedMessages);
             return;
+        } else if ("ALERT".equals(getNotificationLevel())) {
+            var result = parsedMessages.stream()
+                    .filter(message -> Integer.parseInt(message.getMessage()) > MAX_RATE)
+                    .collect(Collectors.toList());
+            sendMessages(result);
         }
-        var result = parsedMessages.stream()
-                .filter(message -> Integer.parseInt(message.getMessage()) > MAX_RATE)
-                .collect(Collectors.toList());
-        sendMessages(result);
     }
 
     public List<AgentMessage> parseSite() {
@@ -84,5 +82,9 @@ public class SiteParserService {
                 log.error("Ошибка отправки сообщения");
             }
         });
+    }
+
+    private String getNotificationLevel() {
+        return messageRpcService.notificationLevel().toString();
     }
 }
