@@ -30,11 +30,15 @@ public class SiteParserService {
     @Value("${siteconnection.url}")
     private String siteUrl;
 
-    @Value("${max.radiation.rate")
+    @Value("${max.radiation.rate}")
     private int MAX_RATE;
 
     @Value("${is.level.info}")
     private boolean IS_LEVEL_INFO;
+
+    private List<Integer> excludeRadarList = List.of(3725, 3729, 3731, 3732, 3733, 3734, 3756,
+//            3765, 3770, 3771, 3774,
+            3775, 3777, 3778);
 
     @Scheduled(fixedRate = 10000)
     public void executeJob() throws Exception, Throwable {
@@ -66,6 +70,7 @@ public class SiteParserService {
         }
         return saveEcoBotDto.getDevices().stream()
                 .filter(d -> nonNull(d.getGamma()))
+                .filter(d -> !excludeRadarList.contains(d.getI()))
                 .map(mapper::toAgentMessage)
                 .collect(Collectors.toList());
     }
