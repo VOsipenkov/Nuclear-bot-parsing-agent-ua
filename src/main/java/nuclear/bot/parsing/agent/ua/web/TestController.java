@@ -1,9 +1,9 @@
 package nuclear.bot.parsing.agent.ua.web;
 
 import lombok.RequiredArgsConstructor;
+import nuclear.bot.core.dto.AgentMessage;
+import nuclear.bot.core.service.MessageRpcService;
 import nuclear.bot.parsing.agent.ua.service.SiteParserService;
-import nuclear.bot.parsingprocessor.dto.AgentMessage;
-import nuclear.bot.parsingprocessor.service.MessageRpcService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +22,7 @@ public class TestController {
         var agentMessage = new AgentMessage();
         agentMessage.setMessage(message);
         agentMessage.setMessageDateTime(LocalDateTime.now().toString());
-        agentMessage.setParsingAgentName("UA-agent");
+        agentMessage.setParserAgentName("UA-agent");
         messageRpcService.sendMessage(agentMessage);
         return ResponseEntity.ok("ok");
     }

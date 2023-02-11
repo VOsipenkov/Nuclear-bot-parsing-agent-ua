@@ -3,9 +3,9 @@ package nuclear.bot.parsing.agent.ua.service;
 import com.googlecode.jsonrpc4j.JsonRpcHttpClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import nuclear.bot.parsingprocessor.dto.AgentMessage;
-import nuclear.bot.parsingprocessor.service.AlertLevel;
-import nuclear.bot.parsingprocessor.service.MessageRpcService;
+import nuclear.bot.core.dto.AgentMessage;
+import nuclear.bot.core.service.AlertLevel;
+import nuclear.bot.core.service.MessageRpcService;
 import org.springframework.stereotype.Service;
 
 @Slf4j
