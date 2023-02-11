@@ -10,8 +10,8 @@ import java.util.HashMap;
 
 @Mapper(imports = {HashMap.class, LocalDateTime.class})
 public interface DeviceAgentMessageMapper {
-    @Mapping(source = "gamma", target = "message")
-    @Mapping(target = "parsingAgentName", constant = "SaveEcoBot")
+    @Mapping(target = "message", source = "gamma")
+    @Mapping(target = "parserAgentName", constant = "https://www.saveecobot.com/")
     @Mapping(target = "messageDateTime", expression = "java(LocalDateTime.now().toString())")
     @Mapping(target = "additionalProperties", expression = "java(new HashMap<String, Object>())")
     AgentMessage toAgentMessage(Device device);
