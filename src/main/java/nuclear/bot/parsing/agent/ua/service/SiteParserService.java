@@ -4,10 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nuclear.bot.core.dto.AgentMessage;
-import nuclear.bot.core.service.MessageRpcService;
 import nuclear.bot.parsing.agent.ua.service.dto.SaveEcoBotDto;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -23,7 +21,7 @@ import static org.springframework.util.CollectionUtils.isEmpty;
 @Service
 @RequiredArgsConstructor
 public class SiteParserService {
-    private final MessageRpcService messageRpcService;
+
     private final RestTemplate restTemplate;
     private final DeviceAgentMessageMapper mapper;
     private final ObjectMapper objectMapper;
@@ -31,24 +29,12 @@ public class SiteParserService {
     private String siteUrl;
 
     @Value("${max.radiation.rate}")
-    private int MAX_RATE;
+    private int MAX_RATE;//максимальное допустимое значение радицации
 
+    // Исключаем зараженные точки на карте
     private List<Integer> excludeRadarList = List.of(3725, 3729, 3731, 3732, 3733, 3734, 3756,
             3765, 3770, 3771, 3774,
             3775, 3777, 3778);
-
-    @Scheduled(fixedRate = 10000)
-    public void executeJob() throws Exception, Throwable {
-        var parsedMessages = parseSite();
-        if ("INFO".equals(getNotificationLevel())) {
-            sendMessages(parsedMessages);
-        } else if ("ALERT".equals(getNotificationLevel())) {
-            var result = parsedMessages.stream()
-                    .filter(message -> Integer.parseInt(message.getMessage()) > MAX_RATE)
-                    .collect(Collectors.toList());
-            sendMessages(result);
-        }
-    }
 
     public List<AgentMessage> parseSite() {
         try {
@@ -70,20 +56,5 @@ public class SiteParserService {
                 .filter(d -> !excludeRadarList.contains(d.getI()))
                 .map(mapper::toAgentMessage)
                 .collect(Collectors.toList());
-    }
-
-    private void sendMessages(List<AgentMessage> agentMessages) {
-        agentMessages.forEach(item -> {
-            try {
-                messageRpcService.sendMessage(item);
-                log.info("Сообщение отправлено");
-            } catch (Throwable e) {
-                log.error("Ошибка отправки сообщения");
-            }
-        });
-    }
-
-    private String getNotificationLevel() {
-        return messageRpcService.notificationLevel().toString();
     }
 }
