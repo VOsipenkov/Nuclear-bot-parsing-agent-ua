@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import nuclear.bot.core.dto.AgentMessage;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -19,7 +18,7 @@ public class AgentProcessingService {
     private final SiteParserService siteParserService;
     private final KafkaTemplate<String, AgentMessage> kafkaTemplate;
 
-    @Scheduled(fixedRateString = "${refresh.time}")
+//    @Scheduled(fixedRateString = "${refresh.time}")
     public void executeJob() {
         var parsedMessages = siteParserService.parseSite();
         sendMessages(parsedMessages);
