@@ -37,7 +37,6 @@ public class AgentMessage {
     private String messageDateTime;
     /**
      * Message from agent
-     * 
      */
     @JsonProperty("message")
     @JsonPropertyDescription("Message from agent")
