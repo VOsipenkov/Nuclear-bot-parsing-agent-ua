@@ -11,7 +11,7 @@ import java.util.HashMap;
 @Mapper(imports = {HashMap.class, OffsetDateTime.class})
 public interface DeviceAgentMessageMapper {
     @Mapping(target = "message", expression = "java(String.valueOf(device.getGamma()/10f ))") /* convert nanozivert to microrentgen */
-    @Mapping(target = "parserAgentName", constant = "https://www.saveecobot.com/radiation-maps")
+    @Mapping(target = "parserAgentName", constant = "www.saveecobot.com")
     @Mapping(target = "messageDateTime", expression = "java(OffsetDateTime.now().toString())")
     @Mapping(target = "additionalProperties", expression = "java(new HashMap<String, Object>())")
     AgentMessage toAgentMessage(Device device);
